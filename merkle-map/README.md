@@ -1,8 +1,8 @@
 # Mina zkApp: Merkle Map
 
-This template uses TypeScript
+This template uses TypeScript.
 
-Build using `zk-client`
+Was created using `zk-client`
 
 **IMPORTANT** Use `node 19` via `nvm use stable`
 
