@@ -1,7 +1,7 @@
 # zkLearn
 Includes examples and experiments while learning how to build MINA zkApps
 
-### [Simple](./simple) ###
+### [Simple](./01-simple) ###
 
 **The basic "Hello World" example**
 
@@ -13,7 +13,7 @@ Changes:
 - Changed code in `main.ts` eliminated some deprecated methods.
 - Divided in blocks and heavily commented `main.ts` 
 
-### [Merkle-Map](./merkle-map) 
+### [Merkle-Map](./02-merkle-map) 
 
 **A MerkleMap usage example**
 
@@ -29,3 +29,18 @@ Changes:
 TODO:
 - Refactor deploy and environment setup in `main.ts`
 - Add an Offchain storage server for the MerkleMap
+
+### [zkApp UI using SvelteKit](./05-zkapp-sveltekit-ui/)
+
+**An example on how to correctlye setup and build a zkApp UI using SvelteKit.** 
+
+**Why ?** 
+
+- Currently most tutorials and examples for MINA zkApps UI are using React, and had trouble finding examples with Svelte and SvelteKit.
+- At the time of this writing (2023-06-20) a project created fro SvelteKit using `zk project ...` will not build.
+
+It demonstrates how to: 
+
+1. **Load Snarky, init the zkApp instance, and compile the contract**
+2. **Connect the Auro wallet**
+3. **Call a method on the contract and send a transaction with fees payed with the wallet**
