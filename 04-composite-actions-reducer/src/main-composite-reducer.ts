@@ -29,33 +29,34 @@ profiler.start('Reducer zkApp test flow');
 
 const zkapp = await deployCounterZkapp(feePayer, doProofs);
 
-console.log('applying actions..');
+console.log('main applying actions..');
 
-console.log('action 1');
+console.log('main action 1');
 
 let tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.incrementCounter();
+  //zkapp.rollupIncrements();
 });
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('action 2');
+console.log('main action 2');
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.incrementCounter();
 });
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('action 3');
+console.log('main action 3');
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.incrementCounter();
 });
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('rolling up pending actions..');
+console.log('main rolling up pending actions..');
 
-console.log('state before: ' + zkapp.counter.get());
+console.log('main state before: ' + zkapp.counter.get());
 
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.rollupIncrements();
@@ -63,28 +64,28 @@ tx = await Mina.transaction(feePayer.publicKey, () => {
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('state after rollup: ' + zkapp.counter.get());
+console.log('main state after rollup: ' + zkapp.counter.get());
 assert.deepEqual(zkapp.counter.get().toString(), '3');
 
-console.log('applying more actions');
+console.log('main applying more actions');
 
-console.log('action 4 (no increment)');
+console.log('main action 4 (no increment)');
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.dispatchData(Field.random());
 });
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('action 5');
+console.log('main action 5');
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.incrementCounter();
 });
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('rolling up pending actions..');
+console.log('main rolling up pending actions..');
 
-console.log('state before: ' + zkapp.counter.get());
+console.log('main state before: ' + zkapp.counter.get());
 
 tx = await Mina.transaction(feePayer.publicKey, () => {
   zkapp.rollupIncrements();
@@ -92,7 +93,7 @@ tx = await Mina.transaction(feePayer.publicKey, () => {
 await tx.prove();
 await tx.sign([feePayer.privateKey]).send();
 
-console.log('state after rollup: ' + zkapp.counter.get());
+console.log('main state after rollup: ' + zkapp.counter.get());
 assert.equal(zkapp.counter.get().toString(), '4');
 
 profiler.stop().store();

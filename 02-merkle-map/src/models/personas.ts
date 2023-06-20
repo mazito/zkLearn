@@ -27,6 +27,7 @@ class Personas {
     this.contract = instance;
     this.sender = sender ;
     this.merkleMap = new MerkleMap();
+    console.log(`\nmerkleMap new JSON=`, JSON.stringify(this.merkleMap.tree, null,2));
   }
 
   /**
@@ -48,6 +49,9 @@ class Personas {
     const newRoot = this.merkleMap.getRoot();
     console.log(`\nmodels.Persona: merkleMap root=${newRoot}`);
   
+      console.log(`\nmerkleMap update JSON=`, JSON.stringify(this.merkleMap.tree, null,2));
+    // console.log(`\nmerkleMap JSON=`, JSON.stringify(this.merkleMap));
+
     // get the Witness of the changed key and value
     // LATTER ! const witness = this.merkleMap.getWitness(key);
   
@@ -89,13 +93,17 @@ class Personas {
     this.merkleMap.set(key, newValue);
     console.log(`\nmodels.Persona: merkleMap key=${key.toString()}, value=${this.merkleMap.get(key)}`);
   
+    //console.log(`\nmerkleMap JSON=`, JSON:stringify(this.merkleMap));
+
     // get its root
     const newRoot = this.merkleMap.getRoot();
     console.log(`\nmodels.Persona: merkleMap root=${newRoot}`);
-  
+    
     // get the Witness of the changed key and value
     const witness = this.merkleMap.getWitness(key);
-  
+    console.log(`\nmodels.Persona: merkleMap witness JSON=`, witness.toJSON());
+    console.log(`\nmodels.Persona: merkleMap witness=`, witness);
+    
     // update your local zkApp account with a transaction
     console.log(`\nmodels.Persona: Calling update(...) on Contract ...`)
     const txn1 = await Mina.transaction(this.sender.publicKey, () => {

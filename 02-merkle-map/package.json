@@ -47,5 +47,9 @@
   },
   "peerDependencies": {
     "snarkyjs": "0.10.*"
+  },
+  "dependencies": {
+    "fastify": "^4.17.0",
+    "pino": "^8.14.1"
   }
 }

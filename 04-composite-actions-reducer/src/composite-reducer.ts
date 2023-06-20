@@ -12,7 +12,8 @@ import {
   Bool,
   Struct,
   Reducer,
-  Provable, Circuit
+  // Provable, 
+  Circuit
 } from 'snarkyjs';
 
 import { getProfiler } from './profiler.js';
@@ -60,12 +61,15 @@ class CounterZkapp extends SmartContract {
   // on-chain version of our state. it will typically lag behind the
   // version that's implicitly represented by the list of actions
   @state(Field) counter = State<Field>();
+
   // helper field to store the point in the action history that our on-chain state is at
   @state(Field) actionState = State<Field>();
 
   @method incrementCounter() {
     this.reducer.dispatch(INCREMENT);
+    Circuit.log("CounterZkapp/incrementCounter/reducer.dispatch isIncrement=", INCREMENT.isIncrement);
   }
+
   @method dispatchData(data: Field) {
     this.reducer.dispatch({ 
       isIncrement: Bool(false), otherData: data,
@@ -74,7 +78,8 @@ class CounterZkapp extends SmartContract {
       filler4: Field(0), filler5: Field(0),
       filler6: Field(0), filler7: Field(0),
       filler8: Field(0), filler9: Field(0), 
-     });
+    });
+    Circuit.log("CounterZkapp/dispatchData/reducer.dispatch data=", data);
   }
 
   @method rollupIncrements() {
@@ -88,6 +93,8 @@ class CounterZkapp extends SmartContract {
     let pendingActions = this.reducer.getActions({
       fromActionState: actionState,
     });
+    Circuit.log("CounterZkapp/rollupIncrements actionState=", actionState);
+    Circuit.log("CounterZkapp/rollupIncrements pendingActions.len=", pendingActions.length);
 
     let { state: newCounter, actionState: newActionState } =
       this.reducer.reduce(
@@ -98,6 +105,7 @@ class CounterZkapp extends SmartContract {
         (state: Field, action: MaybeIncrement) => {
           // this has an error: 
           // return Provable.if(action.isIncrement, state.add(1), state);
+          Circuit.log("CounterZkapp/rollupIncrements/reducer.reduce state,action.isIncrement=", state, action.isIncrement);
           return Circuit.if(action.isIncrement, state.add(1), state);
         },
         { state: counter, actionState }
@@ -127,11 +135,12 @@ async function deployCounterZkapp(
   let zkappAddress = zkappKey.toPublicKey();
   let zkapp = new CounterZkapp(zkappAddress);
   if (doProofs) {
-    console.log('compile');
+    console.log('deployCounterZkapp compiling ...');
     await CounterZkapp.compile();
+    console.log('deployCounterZkapp compile done!');
   }
   
-  console.log('deploy');
+  console.log('deployCounterZkapp deploying ...');
   let tx = await Mina.transaction(feePayer.publicKey, () => {
     AccountUpdate.fundNewAccount(feePayer.publicKey);
     zkapp.deploy();
@@ -139,6 +148,7 @@ async function deployCounterZkapp(
     zkapp.actionState.set(Reducer.initialActionState);
   });
   await tx.sign([feePayer.privateKey, zkappKey]).send();
+  console.log('deployCounterZkapp deployed!');
 
   return zkapp;
 }
