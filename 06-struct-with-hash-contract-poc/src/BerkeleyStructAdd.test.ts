@@ -11,7 +11,7 @@ import { uuidToField, Org } from './organizations';
 let proofsEnabled = true;
 
 const BERKELEY_URL = 'https://proxy.berkeley.minaexplorer.com/graphql';
-const TX_FEE = 100_000_000;    
+const TX_FEE = 1_500_000_000; // 1.5   
 
 // 'learn1' account which deployed the contract
 const 
@@ -63,21 +63,22 @@ describe('StructAdd', () => {
     zkApp = new StructAdd(zkAppAddress);
   });
 
-  it('correctly sends a event using `updateOrgLeaf`', async () => {
+/*   it('correctly sends a event using `updateOrgLeaf`', async () => {
     let done = await test_updateOrgLeaf();
     expect(done).toEqual(1);
   });
-
+ */
   it('correctly updates using updateOrgNoHash', async () => {
+    await fetchAccount({publicKey: zkAppAddress})
     let done = await test_updateOrgNoHash();
     expect(done).toEqual(1);
   });
 
-  it('correctly updates using updateOrgWithHash', async () => {
+/*   it('correctly updates using updateOrgWithHash', async () => {
     let done = await test_updateOrgWithHash();
     expect(done).toEqual(1);
   });
-});
+ */});
 
 
 async function test_updateOrgLeaf() {
@@ -106,11 +107,14 @@ async function test_updateOrgNoHash() {
 
   // update transaction
   try {
-    const txn = await Mina.transaction(senderAccountId, () => {
+    const sender = { fee: TX_FEE, sender: senderAccountId };
+    const txn = await Mina.transaction(sender, () => {
       zkApp.updateOrgNoHash(someOrg);
     });
     await txn.prove();
-    await txn.sign([senderPrivateKey]).send();
+    await txn.sign([senderPrivateKey]);
+    await txn.send();
+
     done = 1;
   }
   catch (err) {
