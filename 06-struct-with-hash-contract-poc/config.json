@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "deployAliases": {
+    "berkeley": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/berkeley.json",
+      "feepayerKeyPath": "/home/mzito/.cache/zkapp-cli/keys/test3.json",
+      "feepayerAlias": "test3",
+      "fee": "0.5",
+      "smartContract": "StructAdd"
+    },
+    "berkeley1": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/berkeley1.json",
+      "feepayerKeyPath": "/home/mzito/.cache/zkapp-cli/keys/learn1.json",
+      "feepayerAlias": "learn1",
+      "fee": "0.5",
+      "smartContract": "StructAdd"
+    },
+    "berkeley2": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/berkeley2.json",
+      "feepayerKeyPath": "/home/mzito/.cache/zkapp-cli/keys/learn1.json",
+      "feepayerAlias": "learn1",
+      "fee": "0.1",
+      "smartContract": "StructAdd"
+    }
+  }
+}
