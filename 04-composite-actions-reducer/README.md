@@ -1,6 +1,6 @@
 # Mina zkApp: Actions Reducer
 
-A more complex reducer, where `actionType` is based on a composite `Struct`.
+A more complex reducer, where `actionType` is based on a bigger composite `Struct` to test limitations on the actionType size.
 
 ~~~typescript
   class Composite extends Struct({
